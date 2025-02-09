@@ -1,7 +1,6 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-
 public class CheckEmail
 {
 	public static bool IsValidEmail(string email)

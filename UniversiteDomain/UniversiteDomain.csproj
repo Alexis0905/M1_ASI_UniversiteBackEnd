@@ -7,9 +7,30 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="UseCases\EtudiantUseCases\Delete\" />
-      <Folder Include="UseCases\EtudiantUseCases\Get\" />
-      <Folder Include="UseCases\EtudiantUseCases\Update\" />
+      <Folder Include="UseCases\EtudiantUseCases\Add\" />
+      <Folder Include="UseCases\NoteUseCases\Create\" />
+      <Folder Include="UseCases\NoteUseCases\Delete\" />
+      <Folder Include="UseCases\NoteUseCases\Get\" />
+      <Folder Include="UseCases\NoteUseCases\Update\" />
+      <Folder Include="UseCases\ParcoursUseCases\Delete\" />
+      <Folder Include="UseCases\ParcoursUseCases\Get\" />
+      <Folder Include="UseCases\ParcoursUseCases\Update\" />
+      <Folder Include="UseCases\UeUseCases\Add\" />
+      <Folder Include="UseCases\UeUseCases\Delete\" />
+      <Folder Include="UseCases\UeUseCases\Get\" />
+      <Folder Include="UseCases\UeUseCases\Update\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
+      <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Mvc.Core">
+        <HintPath>..\..\..\..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.11\ref\net8.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

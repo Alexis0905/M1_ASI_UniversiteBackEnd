@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 
-
 namespace UniversiteDomain.DataAdapters
 {
     public interface IRepository<T> where T : class

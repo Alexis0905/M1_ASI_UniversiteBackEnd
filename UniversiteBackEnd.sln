@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversiteDomain", "Univers
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversiteDomainUnitTests", "UniversiteDomainUnitTests\UniversiteDomainUnitTests.csproj", "{47120F7D-EEB1-4A57-A58C-7821E3EE091E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversiteEFDataProvider", "UniversiteEFDataProvider\UniversiteEFDataProvider.csproj", "{B2D02D68-3F6C-46DC-899D-0C38485C080C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UniversiteRestApi", "UniversiteRestApi\UniversiteRestApi.csproj", "{77686355-3169-4097-A955-241C65FFF014}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{002F5A02-A728-412D-87CA-D0321903D819} = {C9BEE7E5-3514-4F29-9E61-01578FA0062E}
 		{47120F7D-EEB1-4A57-A58C-7821E3EE091E} = {D617CECE-9A69-4B16-BA18-BE2C095BD5B2}
+		{B2D02D68-3F6C-46DC-899D-0C38485C080C} = {05EBCD57-771B-47D3-BEEC-420193E2F358}
+		{77686355-3169-4097-A955-241C65FFF014} = {5B7C632C-5A37-4CB2-8C3C-40B75B55C175}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{002F5A02-A728-412D-87CA-D0321903D819}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +36,13 @@ Global
 		{47120F7D-EEB1-4A57-A58C-7821E3EE091E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47120F7D-EEB1-4A57-A58C-7821E3EE091E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47120F7D-EEB1-4A57-A58C-7821E3EE091E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2D02D68-3F6C-46DC-899D-0C38485C080C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D02D68-3F6C-46DC-899D-0C38485C080C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D02D68-3F6C-46DC-899D-0C38485C080C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2D02D68-3F6C-46DC-899D-0C38485C080C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77686355-3169-4097-A955-241C65FFF014}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77686355-3169-4097-A955-241C65FFF014}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77686355-3169-4097-A955-241C65FFF014}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77686355-3169-4097-A955-241C65FFF014}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
