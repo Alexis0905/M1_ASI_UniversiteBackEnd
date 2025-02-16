@@ -7,30 +7,33 @@ namespace UniversiteDomain.UseCases.EtudiantUseCases.Delete;
 
 public class DeleteEtudiantUseCase(IRepositoryFactory factory)
 {
-	public async Task<int> ExecuteAsync(Etudiant etudiant)
-	{
-		await CheckBusinessRules(etudiant);
-		await factory.EtudiantRepository().DeleteAsync(etudiant);
-		factory.EtudiantRepository().SaveChangesAsync().Wait();
-		return 0;
-	}
-
 	public async Task<int> ExecuteAsync(long id)
 	{
-		await CheckBusinessRules(await factory.EtudiantRepository().FindAsync(id));
+		await CheckBusinessRules();
+		var etudiant = await factory.EtudiantRepository().FindAsync(id);
+
+		if (etudiant == null) throw new EtudiantNotFoundException();
+
+		var notes = await factory.NoteRepository().FindByConditionAsync(n => n.IdEtud == id);
+		foreach (var note in notes)
+		{
+			await factory.NoteRepository().DeleteAsync(note);
+		}
 		await factory.EtudiantRepository().DeleteAsync(id);
-		factory.SaveChangesAsync().Wait();
+
+		await factory.EtudiantRepository().SaveChangesAsync();
 		return 0;
 	}
 
-	private async Task CheckBusinessRules(Etudiant etudiant)
+	private async Task CheckBusinessRules()
 	{
-		ArgumentNullException.ThrowIfNull(etudiant);
-		ArgumentNullException.ThrowIfNull(factory.EtudiantRepository());
+		ArgumentNullException.ThrowIfNull(factory);
+		IEtudiantRepository etudiantRepository=factory.EtudiantRepository();
+		ArgumentNullException.ThrowIfNull(etudiantRepository);
 	}
 
 	public bool IsAuthorized(string role)
 	{
-		return role.Equals(Roles.Responsable);
+		return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
 	}
 }

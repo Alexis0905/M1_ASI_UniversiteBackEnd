@@ -9,16 +9,8 @@ using UniversiteDomain.UseCases.SecurityUseCases.Create;
 
 namespace UniversiteDomain.JeuxDeDonnees;
 
-public class BasicBdBuilder : BdBuilder
+public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(repositoryFactory)
 {
-    private readonly IRepositoryFactory _repositoryFactory;
-
-    // Le constructeur pour injecter IRepositoryFactory
-    public BasicBdBuilder(IRepositoryFactory repositoryFactory) : base(repositoryFactory)
-    {
-        _repositoryFactory = repositoryFactory;
-    }
-
     private readonly string Password = "Miage2025#";
 
     private readonly Etudiant[] _etudiants =
@@ -119,34 +111,31 @@ public class BasicBdBuilder : BdBuilder
     protected override async Task RegenererBdAsync()
     {
         // Ici je décide de supprimer et recréer la BD
-        await _repositoryFactory.EnsureDeletedAsync();
-        await _repositoryFactory.EnsureCreatedAsync();
+        await repositoryFactory.EnsureDeletedAsync();
+        await repositoryFactory.EnsureCreatedAsync();
     }
 
     protected override async Task BuildEtudiantsAsync()
     {
-        var etudiantRepository = _repositoryFactory.EtudiantRepository();
         foreach (Etudiant e in _etudiants)
         {
-            await new CreateEtudiantUseCase(etudiantRepository).ExecuteAsync(e);
+            await new CreateEtudiantUseCase(repositoryFactory).ExecuteAsync(e);
         }
     }
 
     protected override async Task BuildParcoursAsync()
     {
-        var parcoursRepository = _repositoryFactory.ParcoursRepository();
         foreach (Parcours parcours in _parcours)
         {
-            await new CreateParcoursUseCase(parcoursRepository).ExecuteAsync(parcours);
+            await new CreateParcoursUseCase(repositoryFactory).ExecuteAsync(parcours);
         }
     }
 
     protected override async Task BuildUesAsync()
     {
-        var ueRepository = _repositoryFactory.UeRepository();
         foreach (Ue ue in _ues)
         {
-            await new CreateUeUseCase(ueRepository).ExecuteAsync(ue);
+            await new CreateUeUseCase(repositoryFactory).ExecuteAsync(ue);
         }
     }
 
@@ -154,7 +143,7 @@ public class BasicBdBuilder : BdBuilder
     {
         foreach (Inscription i in _inscriptions)
         {
-            await new AddEtudiantDansParcoursUseCase(_repositoryFactory).ExecuteAsync(i.IdParcours,i.IdEtud);
+            await new AddEtudiantDansParcoursUseCase(repositoryFactory).ExecuteAsync(i.IdParcours,i.IdEtud);
         }
     }
 
@@ -162,7 +151,7 @@ public class BasicBdBuilder : BdBuilder
     {
         foreach(UeDansParcours u in _maquette)
         {
-            await new AddUeDansParcoursUseCase(_repositoryFactory).ExecuteAsync(u.IdParcours, u.IdUe);
+            await new AddUeDansParcoursUseCase(repositoryFactory).ExecuteAsync(u.IdParcours, u.IdUe);
         }
     }
 
@@ -170,21 +159,21 @@ public class BasicBdBuilder : BdBuilder
     {
         foreach(var note in _notes)
         {
-            await new AddNoteUseCase(_repositoryFactory).ExecuteAsync(note.Valeur, note.IdEtud, note.IdUe);
+            await new AddNoteUseCase(repositoryFactory).ExecuteAsync(note.Valeur, note.IdEtud, note.IdUe);
         }
     }
 
     protected override async Task BuildRolesAsync()
     {
         // Création des rôles dans la table aspnetroles
-        await new CreateUniversiteRoleUseCase(_repositoryFactory).ExecuteAsync(Roles.Responsable);
-        await new CreateUniversiteRoleUseCase(_repositoryFactory).ExecuteAsync(Roles.Scolarite);
-        await new CreateUniversiteRoleUseCase(_repositoryFactory).ExecuteAsync(Roles.Etudiant);
+        await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Responsable);
+        await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Scolarite);
+        await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Etudiant);
     }
 
     protected override async Task BuildUsersAsync()
     {
-        CreateUniversiteUserUseCase uc = new CreateUniversiteUserUseCase(_repositoryFactory);
+        CreateUniversiteUserUseCase uc = new CreateUniversiteUserUseCase(repositoryFactory);
         // Création des étudiants
         foreach (var etudiant in _etudiants)
         {

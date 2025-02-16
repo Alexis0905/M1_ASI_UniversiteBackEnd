@@ -6,8 +6,9 @@ namespace UniversiteDomain.UseCases.EtudiantUseCases.Get;
 
 public class GetAllEtudiantsUseCase(IRepositoryFactory factory)
 {
-    public async Task<List<Etudiant>> ExecuteAsync()
+    public async Task<List<Etudiant>?> ExecuteAsync()
     {
+        await CheckBusinessRules();
         return await factory.EtudiantRepository().FindAllAsync();
     }
 
@@ -20,6 +21,6 @@ public class GetAllEtudiantsUseCase(IRepositoryFactory factory)
 
     public bool IsAuthorized(string role)
     {
-        return true;
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
     }
 }

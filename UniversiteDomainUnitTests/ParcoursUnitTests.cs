@@ -14,7 +14,8 @@ public class ParcoursUnitTest
 	{
 		
 	}
-	
+
+
 	[Test]
 	public async Task CreateParcoursUseCase()
 	{
@@ -25,24 +26,28 @@ public class ParcoursUnitTest
 		// On crée le parcours qui doit être ajouté en base
 		Parcours parcoursAvant = new Parcours{NomParcours = nomParcours, AnneeFormation = anneeFormation};
 		
-		// On initialise une fausse datasource qui va simuler un EtudiantRepository
-		var mockParcours = new Mock<IParcoursRepository>();
+		// On initialise une fausse datasource qui va simuler un ParcoursRepository
+		var mockParcours = new Mock<IRepositoryFactory>();
 		
 		// Il faut ensuite aller dans le use case pour simuler les appels des fonctions vers la datasource
 		// Nous devons simuler FindByCondition et Create
 		// On dit à ce mock que le parcours n'existe pas déjà
 		mockParcours
-			.Setup(repo=>repo.FindByConditionAsync(p=>p.Id.Equals(idParcours)))
+			.Setup(repo=>repo.ParcoursRepository().FindByConditionAsync(p=>p.Id.Equals(idParcours)))
 			.ReturnsAsync((List<Parcours>)null);
 
 		Parcours parcoursFinal =new Parcours{Id=idParcours,NomParcours= nomParcours, AnneeFormation = anneeFormation};
-		mockParcours.Setup(repo=>repo.CreateAsync(parcoursAvant)).ReturnsAsync(parcoursFinal);
+		mockParcours
+			.Setup(repo=>repo.ParcoursRepository().CreateAsync(parcoursAvant))
+			.ReturnsAsync(parcoursFinal);
 		
 		var mockFactory = new Mock<IRepositoryFactory>();
-		mockFactory.Setup(facto=>facto.ParcoursRepository()).Returns(mockParcours.Object);
+		mockFactory
+			.Setup(facto=>facto.ParcoursRepository())
+			.Returns(mockParcours.Object.ParcoursRepository);
 		
 		// Création du use case en utilisant le mock comme datasource
-		CreateParcoursUseCase useCase=new CreateParcoursUseCase(mockFactory.Object.ParcoursRepository());
+		CreateParcoursUseCase useCase=new CreateParcoursUseCase(mockFactory.Object);
 		
 		// Appel du use case
 		var parcoursTeste=await useCase.ExecuteAsync(parcoursAvant);
@@ -52,7 +57,8 @@ public class ParcoursUnitTest
 		Assert.That(parcoursTeste.NomParcours, Is.EqualTo(parcoursFinal.NomParcours));
 		Assert.That(parcoursTeste.AnneeFormation, Is.EqualTo(parcoursFinal.AnneeFormation));
 	}
-	
+
+
 	[Test]
 	public async Task AddEtudiantDansParcoursUseCase()
 	{
@@ -102,6 +108,7 @@ public class ParcoursUnitTest
 		Assert.That(parcoursTest.Inscrits.Count, Is.EqualTo(1));
 		Assert.That(parcoursTest.Inscrits[0].Id, Is.EqualTo(idEtudiant));
 	}
+
 
 	[Test]
 	public async Task AddUeDansParcoursUseCase()

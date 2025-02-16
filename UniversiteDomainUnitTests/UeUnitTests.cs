@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Moq;
 using UniversiteDomain.DataAdapters;
+using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.UseCases.UeUseCases.Create;
 
@@ -13,7 +14,8 @@ public class UeUnitTests
 	{
 		
 	}
-	
+
+
 	[Test]
 	public async Task CreateUeUseCase()
 	{
@@ -22,19 +24,19 @@ public class UeUnitTests
 		string intitule = "Ue test 123";
 		
 		Ue ueSansId = new Ue { NumeroUe = numeroUe, Intitule = intitule };
-		var mock = new Mock<IUeRepository>();
+		var mock = new Mock<IRepositoryFactory>();
 		var reponseFindByCondition = new List<Ue>();
 		
 		mock
-			.Setup(repo=>repo.FindByConditionAsync(It.IsAny<Expression<Func<Ue, bool>>>()))
+			.Setup(repo=>repo.UeRepository().FindByConditionAsync(It.IsAny<Expression<Func<Ue, bool>>>()))
 			.ReturnsAsync(reponseFindByCondition);
 			
 		Ue ueCreee = new Ue{Id=idUe, NumeroUe= numeroUe, Intitule = intitule};
 		mock
-			.Setup(repo=>repo.CreateAsync(ueSansId))
+			.Setup(repo=>repo.UeRepository().CreateAsync(ueSansId))
 			.ReturnsAsync(ueCreee);
 		
-		var fauxUeRepository = mock.Object;
+		IRepositoryFactory fauxUeRepository = mock.Object;
 		
 		CreateUeUseCase useCase =new CreateUeUseCase(fauxUeRepository);
 		var ueTeste=await useCase.ExecuteAsync(ueSansId);

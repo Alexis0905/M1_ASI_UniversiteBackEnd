@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Moq;
 using UniversiteDomain.DataAdapters;
+using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.UseCases.EtudiantUseCases;
 using UniversiteDomain.UseCases.EtudiantUseCases.Create;
@@ -14,7 +15,8 @@ public class EtudiantUnitTest
 	{
 	
 	}
-	
+
+
 	[Test]
 	public async Task CreateEtudiantUseCase()
 	{
@@ -28,7 +30,7 @@ public class EtudiantUnitTest
 		Etudiant etudiantSansId = new Etudiant{NumEtud=numEtud, Nom = nom, Prenom=prenom, Email=email};
 		//  Créons le mock du repository
 		// On initialise une fausse datasource qui va simuler un EtudiantRepository
-		var mock = new Mock<IEtudiantRepository>();
+		var mock = new Mock<IRepositoryFactory>();
 		// Il faut ensuite aller dans le use case pour voir quelles fonctions simuler
 		// Nous devons simuler FindByCondition et Create
 		
@@ -39,18 +41,18 @@ public class EtudiantUnitTest
 		// On crée un bouchon dans le mock pour la fonction FindByCondition
 		// Quelque soit le paramètre de la fonction FindByCondition, on renvoie la liste vide
 		mock
-			.Setup(repo=>repo.FindByConditionAsync(It.IsAny<Expression<Func<Etudiant, bool>>>()))
+			.Setup(repo=>repo.EtudiantRepository().FindByConditionAsync(It.IsAny<Expression<Func<Etudiant, bool>>>()))
 			.ReturnsAsync(reponseFindByCondition);
 		
 		// Simulation de la fonction Create
 		// On lui dit que l'ajout d'un étudiant renvoie un étudiant avec l'Id 1
 		Etudiant etudiantCree =new Etudiant{Id=id,NumEtud=numEtud, Nom = nom, Prenom=prenom, Email=email};
 		mock
-			.Setup(repoEtudiant=>repoEtudiant.CreateAsync(etudiantSansId))
+			.Setup(repo=>repo.EtudiantRepository().CreateAsync(etudiantSansId))
 			.ReturnsAsync(etudiantCree);
 		
 		// On crée le bouchon (un faux etudiantRepository). Il est prêt à être utilisé
-		var fauxEtudiantRepository = mock.Object;
+		IRepositoryFactory fauxEtudiantRepository = mock.Object;
 		
 		// Création du use case en injectant notre faux repository
 		CreateEtudiantUseCase useCase=new CreateEtudiantUseCase(fauxEtudiantRepository);

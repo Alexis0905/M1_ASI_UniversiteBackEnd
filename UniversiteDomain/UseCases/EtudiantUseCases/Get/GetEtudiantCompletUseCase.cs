@@ -22,7 +22,8 @@ public class GetEtudiantCompletUseCase(IRepositoryFactory factory)
 
     public bool IsAuthorized(string role, IUniversiteUser user, long idEtudiant)
     {
-        if (role.Equals(Roles.Scolarite) || role.Equals(Roles.Responsable)) return true;
+        if (role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite))
+            return true;
         // Si c'est un étudiant qui est connecté,
         // il ne peut consulter que ses notes
         return user.Etudiant!=null && role.Equals(Roles.Etudiant) && user.Etudiant.Id==idEtudiant;

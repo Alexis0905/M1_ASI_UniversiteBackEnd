@@ -1,10 +1,11 @@
 using UniversiteDomain.DataAdapters;
+using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.Exceptions.ParcoursExceptions;
 
 namespace UniversiteDomain.UseCases.ParcoursUseCases.Create;
 
-public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
+public class CreateParcoursUseCase(IRepositoryFactory factory)
 {
 	public async Task<Parcours> ExecuteAsync(string nomParcours, int anneeFormation)
 	{
@@ -15,8 +16,8 @@ public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
 	public async Task<Parcours> ExecuteAsync(Parcours parcours)
 	{
 		await CheckBusinessRules(parcours);
-		Parcours pa = await parcoursRepository.CreateAsync(parcours);
-		parcoursRepository.SaveChangesAsync().Wait();
+		Parcours pa = await factory.ParcoursRepository().CreateAsync(parcours);
+		await factory.ParcoursRepository().SaveChangesAsync();
 		return pa;
 	}
 	
@@ -33,6 +34,6 @@ public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
 
 	public bool IsAuthorized(string role)
 	{
-		return role.Equals(Roles.Responsable);
+		return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
 	}
 }

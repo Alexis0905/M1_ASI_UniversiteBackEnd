@@ -10,8 +10,7 @@ public class UniversiteDbContext : IdentityDbContext<UniversiteUser, UniversiteR
 {
     public static readonly ILoggerFactory consoleLogger = LoggerFactory.Create(builder => { builder.AddConsole(); });
 
-    public UniversiteDbContext(DbContextOptions<UniversiteDbContext> options)
-        : base(options)
+    public UniversiteDbContext(DbContextOptions<UniversiteDbContext> options) : base(options)
     {
     }
 
@@ -97,11 +96,11 @@ public class UniversiteDbContext : IdentityDbContext<UniversiteUser, UniversiteR
         modelBuilder.Entity<UniversiteRole>();
     }
 
-    public DbSet <Parcours>? Parcours { get; set; }
-    public DbSet <Etudiant>? Etudiants { get; set; }
-    public DbSet <Ue>? Ues { get; set; }
-    public DbSet <Note>? Notes { get; set; }
-    public DbSet <UniversiteUser>? UniversiteUsers { get; set; }
+    public DbSet<Parcours>? Parcours { get; set; }
+    public DbSet<Etudiant>? Etudiants { get; set; }
+    public DbSet<Ue>? Ues { get; set; }
+    public DbSet<Note>? Notes { get; set; }
+    public DbSet<UniversiteUser>? UniversiteUsers { get; set; }
     public DbSet<UniversiteRole>? UniversiteRoles { get; set; }
 
 }

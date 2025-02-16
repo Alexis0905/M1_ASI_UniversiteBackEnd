@@ -3,40 +3,31 @@ using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.Exceptions.EtudiantExceptions;
 
-namespace UniversiteDomain.UseCases.EtudiantUseCases.Delete;
+namespace UniversiteDomain.UseCases.SecurityUseCases.Delete;
 
 public class DeleteUniversiteUserUseCase(IRepositoryFactory factory)
 {
-    public async Task<int> ExecuteAsync(IUniversiteUser universiteUser)
-    {
-        await CheckBusinessRules(universiteUser);
-        await factory.UniversiteUserRepository().DeleteAsync(universiteUser);
-        factory.UniversiteUserRepository().SaveChangesAsync().Wait();
-        return 0;
-    }
-
     public async Task<int> ExecuteAsync(long id)
     {
-        await CheckBusinessRules(id);
+        await CheckBusinessRules();
+        var user = await factory.UniversiteUserRepository().FindByIdEtudAsync(id);
+
+        if (user == null) throw new Exception("User not found");
+
         await factory.UniversiteUserRepository().DeleteAsync(id);
-        factory.UniversiteUserRepository().SaveChangesAsync().Wait();
+        await factory.UniversiteUserRepository().SaveChangesAsync();
         return 0;
     }
 
-    private async Task CheckBusinessRules(IUniversiteUser universiteUser)
+    private async Task CheckBusinessRules()
     {
-        ArgumentNullException.ThrowIfNull(universiteUser);
-        ArgumentNullException.ThrowIfNull(factory.UniversiteUserRepository());
-    }
-
-    private async Task CheckBusinessRules(long id)
-    {
-        ArgumentNullException.ThrowIfNull(id);
-        ArgumentNullException.ThrowIfNull(factory.UniversiteUserRepository());
+        ArgumentNullException.ThrowIfNull(factory);
+        IUniversiteUserRepository universiteUserRepository = factory.UniversiteUserRepository();
+        ArgumentNullException.ThrowIfNull(universiteUserRepository);
     }
 
     public bool IsAuthorized(string role)
     {
-        return role.Equals(Roles.Responsable);
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
     }
 }
